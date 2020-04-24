@@ -1,22 +1,23 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
 
 from gi.repository import GLib, Gtk as gtk, AppIndicator3 as appindicator, GObject
+"""
 import subprocess
-import sys
 import time
-from threading import Thread
+#from threading import Thread
 
 WORK_TIME = (25 * 60)
-
-WORK_PERIODS_BEFORE_LONG_BREAK = 3
+WORK_PERIODS_BEFORE_LONG_BREAK = 4
 REST_TIME_SHORT = (5 * 60)
-REST_TIME_LONG = (15 * 60)
+REST_TIME_LONG = (20 * 60)
 
 def main():
+    """
     indicator = appindicator.Indicator.new("workrest", "task-due-symbolic", \
             appindicator.IndicatorCategory.SYSTEM_SERVICES)
     indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
@@ -26,7 +27,8 @@ def main():
     update.setDaemon(True)
     update.start()
 
-    gtk.main()
+    gtk.main()"""
+    run_timers()
 
 def menu():
     menu = gtk.Menu()
@@ -51,10 +53,11 @@ def run_timers():
         time.sleep(WORK_TIME / 2)
 
         workPeriodsDone = (workPeriodsDone + 1) % WORK_PERIODS_BEFORE_LONG_BREAK
-        subprocess.Popen(["notify-send", "Time to rest."])
         if workPeriodsDone == 0:
+            subprocess.Popen(["notify-send", "Time for a longer break."])
             time.sleep(REST_TIME_LONG)
         else:
+            subprocess.Popen(["notify-send", "Time to rest."])
             time.sleep(REST_TIME_SHORT)
 
 if __name__ == "__main__":
