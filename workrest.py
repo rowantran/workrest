@@ -11,9 +11,9 @@ import subprocess
 import time
 #from threading import Thread
 
-WORK_TIME = (25 * 60)
+WORK_TIME = (30 * 60)
 WORK_PERIODS_BEFORE_LONG_BREAK = 4
-REST_TIME_SHORT = (5 * 60)
+REST_TIME_SHORT = (20 * 60)
 REST_TIME_LONG = (20 * 60)
 
 def main():
@@ -53,10 +53,13 @@ def run_timers():
         time.sleep(WORK_TIME / 2)
 
         workPeriodsDone = (workPeriodsDone + 1) % WORK_PERIODS_BEFORE_LONG_BREAK
+        """
         if workPeriodsDone == 0:
             subprocess.Popen(["notify-send", "Time for a longer break."])
             time.sleep(REST_TIME_LONG)
         else:
+        """
+        if True:
             subprocess.Popen(["notify-send", "Time to rest."])
             time.sleep(REST_TIME_SHORT)
 
