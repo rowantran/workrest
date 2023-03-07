@@ -4,27 +4,25 @@ import subprocess
 import sys
 import time
 
-WORK_TIME = 30
-REST_TIME = 10
+MIN_LENGTH_NOTIFY_HALFWAY = 30
 
 def main():
-    if len(sys.argv) < 2 or sys.argv[1] not in ["work", "rest"]:
-        print(f"usage: {sys.argv[0]} [work | rest]")
+    if len(sys.argv) < 2 or not sys.argv[1].isdigit():
+        print(f"usage: {sys.argv[0]} [minutes]")
         exit(1)
 
-    is_work_timer = (sys.argv[1] == "work")
-    start_timer(is_work_timer)
+    minutes = int(sys.argv[1])
+    start_timer(minutes)
 
-def start_timer(is_work_timer):
-    if is_work_timer:
-        subprocess.Popen(["notify-send", f"Starting work timer for {WORK_TIME} minutes."])
-        time.sleep(WORK_TIME * 60 / 2)
+def start_timer(minutes):
+    subprocess.Popen(["notify-send", f"Starting timer for {minutes} minutes."])
 
+    if minutes >= MIN_LENGTH_NOTIFY_HALFWAY:
+        time.sleep(minutes * 60 / 2)
         subprocess.Popen(["notify-send", "Halfway done."])
-        time.sleep(WORK_TIME * 60 / 2)
+        time.sleep(minutes * 60 / 2)
     else:
-        subprocess.Popen(["notify-send", f"Starting rest timer for {REST_TIME} minutes."])
-        time.sleep(REST_TIME * 60)
+        time.sleep(minutes * 60)
 
     subprocess.Popen(["notify-send", "Time is up!"])
 
